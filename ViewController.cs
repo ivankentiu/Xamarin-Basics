@@ -42,17 +42,22 @@ namespace MyFirstApp
 
             transportText();
 
+            changeBackgroundColor();
+
+        }
+
+        void changeBackgroundColor()
+        {
             if (colorSwitch.On)
             {
                 var randSeed = new Random();
-                var rand1 = (float)randSeed.NextDouble();
-                var rand2 = (float)randSeed.NextDouble();
-                var rand3 = (float)randSeed.NextDouble();
+                var rand1 = (float)randSeed.Next(50, 100);
+                var rand2 = (float)randSeed.Next(50, 100);
+                var rand3 = (float)randSeed.Next(50, 100);
 
-                View.BackgroundColor = UIColor.FromRGB(rand1, rand2, rand3);
+                // .NextDouble 0.0 to 1.0 (closer to 1.0 the lighter the color)
+                View.BackgroundColor = UIColor.FromRGB(rand1 / 100, rand2 / 100, rand3 / 100);
             }
-
-
         }
 
         private async void transportText()
@@ -63,13 +68,15 @@ namespace MyFirstApp
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    InvokeOnMainThread(() => {
+                    InvokeOnMainThread(() =>
+                    {
                         var letter = textField.Text.Substring(0, 1);
                         textView.Text = textView.Text + letter;
                         textField.Text = textField.Text.Substring(1);
                         updateProgressView();
+                        changeBackgroundColor();
                     });
-                   
+
                 });
                 await Task.Delay(500); // wait for half a sec before continuing
             }
